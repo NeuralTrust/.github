@@ -22,7 +22,7 @@ Guidelines for all repositories in the NeuralTrust organization.
 > **Never squash merge `develop` → `main`.** This causes permanent history divergence —
 > Git loses track of which commits are already merged, and future comparisons show ghost commits.
 
-## Commit Messages
+## Commit Messages & PR Titles
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
@@ -34,25 +34,39 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 Common types:
 
-| Type | When to use |
-|------|-------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `refactor` | Code change that neither fixes a bug nor adds a feature |
-| `docs` | Documentation only |
-| `test` | Adding or updating tests |
-| `ci` | CI/CD pipeline changes |
-| `chore` | Maintenance (deps, configs, etc.) |
+| Type | When to use | Semver impact |
+|------|-------------|---------------|
+| `feat` | New feature | **minor** |
+| `fix` | Bug fix | **patch** |
+| `refactor` | Code change that neither fixes a bug nor adds a feature | **patch** |
+| `docs` | Documentation only | **patch** |
+| `test` | Adding or updating tests | **patch** |
+| `ci` | CI/CD pipeline changes | **patch** |
+| `chore` | Maintenance (deps, configs, etc.) | **patch** |
+
+For breaking changes, add `!` after the type/scope: `feat(api)!: remove v1 endpoints`  
+This signals a **major** version bump.
 
 Examples:
 ```
 feat(api): add pagination to list endpoints
 fix(auth): handle expired JWT tokens gracefully
 ci(deps): bump actions/checkout from v3 to v4
+refactor!: rename internal service interfaces
 ```
 
-> Commit messages matter — our AI release workflow uses them to determine the semver bump
-> (major/minor/patch). Clear, conventional messages lead to accurate versioning.
+### Why This Is Enforced
+
+Feature PRs are **squash-merged** into `develop`, so the **PR title becomes the commit message**.
+Those commits feed directly into `ai-release-bump.yml`, which classifies the semver bump:
+
+```
+PR title: "feat(api): add pagination"
+                ↓ squash merge into develop
+commit: "feat(api): add pagination (#42)"
+                ↓ merge develop → main
+git log → AI release bump → v1.3.0 (MINOR)
+```
 
 ## Pull Requests
 
@@ -60,17 +74,15 @@ ci(deps): bump actions/checkout from v3 to v4
 
 1. Branch from `develop` (or `main` for hotfixes)
 2. Keep PRs focused — one feature or fix per PR
-3. Write a clear title following conventional commits format
-4. Add a description explaining **what** and **why**
+3. **Title must follow Conventional Commits** — `type(scope): description`
+4. **Fill in the Summary** in the PR body explaining **what** and **why**
 
 ### Review Process
 
-PRs to `main` go through automated CI:
+PRs go through automated CI:
 
-1. **AI Code Review** — automated review with inline comments
-2. **Tests** — unit and integration tests
-3. **SAST** — security scanning (Trivy is mandatory; Gitleaks/Gosec/Bandit/njsscan are informational)
-4. **Auto-Approve** — if all checks pass, the PR is automatically approved
+1. **Tests** — unit and integration tests
+2. **SAST** — security scanning (Trivy is mandatory; Gitleaks/Gosec/Bandit/njsscan are informational)
 
 ### After Merge
 
