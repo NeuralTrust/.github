@@ -9,8 +9,7 @@ that filtering at the model boundary alone cannot cover.
 |---|---|
 | **[TrustGate](https://github.com/NeuralTrust/TrustGate)** | Open-source AI gateway for LLM and agent traffic. |
 | **[TrustGuard for Cursor](https://github.com/NeuralTrust/trustguard-cursor-plugin)** | AI firewall for the Cursor agent. |
-| **[AI-Gateway-Benchmark](https://github.com/NeuralTrust/AI-Gateway-Benchmark)** | Reproducible performance comparison vs Kong, Tyk,
-KrakenD, Apache APISIX. |
+| **[AI-Gateway-Benchmark](https://github.com/NeuralTrust/AI-Gateway-Benchmark)** | Reproducible performance comparison vs Kong, Tyk, KrakenD, Apache APISIX. |
 | **[echo-chamber](https://github.com/NeuralTrust/echo-chamber)** | Research code for the Echo Chamber jailbreak
 ([paper](https://arxiv.org/abs/2601.05742)). |
 ## Research and standards
